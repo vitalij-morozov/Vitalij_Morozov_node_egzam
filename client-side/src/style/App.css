@@ -1,0 +1,71 @@
+/* F6F6C9, 4FA095, 153462*/
+
+:root {
+  --bg-color: #bad1c2;
+  --main-text-color: #333;
+  --secondary-color: #f6f6c9;
+  --darker-color: #4fa095;
+  --main-dark-color: #153462;
+}
+
+body {
+  background-color: var(--bg-color);
+}
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--main-text-color);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-form {
+  margin-top: 5%;
+  padding: 20px 25px;
+  width: 350px;
+  background-color: var(--darker-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-form a {
+  font-style: italic;
+  text-decoration: underline;
+  color: rgb(30, 30, 233);
+}
+.input-container {
+  width: 100%;
+}
+input::placeholder {
+  font-style: italic;
+}
+.input-container input {
+  width: 100%;
+  padding: 7px;
+  font-size: 15px;
+  border: none;
+}
+.input-container input:focus {
+  background-color: #bad1c2;
+}
+.auth-form button {
+  background-color: transparent;
+  border: 2px solid var(--main-dark-color);
+  padding: 6px 20px;
+  font-size: 15px;
+  font-weight: 700;
+  transition: all 0.3s ease-in-out;
+}
+.auth-form button:hover {
+  background-color: var(--main-dark-color);
+  color: #fff;
+}
