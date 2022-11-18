@@ -24,6 +24,19 @@ label {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 100%;
+}
+
+header {
+  background-color: var(--main-dark-color);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.logo {
+  padding: 10px 0;
 }
 
 .auth-form {
@@ -48,7 +61,8 @@ label {
 input::placeholder {
   font-style: italic;
 }
-.input-container input {
+.input-container input,
+.input-container select {
   width: 100%;
   padding: 7px;
   font-size: 15px;
@@ -68,4 +82,127 @@ input::placeholder {
 .auth-form button:hover {
   background-color: var(--main-dark-color);
   color: #fff;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--main-dark-color);
+  padding-bottom: 3px;
+  width: 100%;
+}
+.auctions-page {
+  margin-top: 3%;
+  width: 100%;
+}
+.auctions {
+  margin-top: 15px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.auction-card {
+  background-color: var(--secondary-color);
+  border: 2px solid var(--main-dark-color);
+}
+.single-auction {
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+.auction-card .text {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.value {
+  font-weight: 700;
+}
+.add-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.auction-form {
+  margin-top: 3%;
+  width: 500px;
+
+  background-color: var(--darker-color);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 30px;
+  align-items: center;
+}
+.auction-form button {
+  margin-top: 15px;
+  background-color: transparent;
+  border: 2px solid var(--main-dark-color);
+  padding: 6px 20px;
+  font-size: 15px;
+  font-weight: 700;
+  transition: all 0.3s ease-in-out;
+}
+
+.auction-form button:hover {
+  background-color: var(--main-dark-color);
+  color: #fff;
+}
+.nav-btn {
+  margin: 0;
+}
+.bids-table {
+  padding: 0 25px;
+  height: 100%;
+}
+.all-bids {
+  border: 2px solid var(--main-dark-color);
+  height: 80%;
+  background-color: var(--secondary-color);
+}
+.single-bid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid lightgray;
+  padding: 5px 50px;
+}
+.no-bids {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+.bid-form {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+.bid-form input {
+  border: 2px solid var(--main-dark-color);
+}
+.bid-form button {
+  background-color: var(--main-dark-color);
+  color: #fff;
+  width: 100px;
+  border: 2px solid var(--main-dark-color);
+  padding: 8px 0;
+  font-weight: 700;
+  border-left: none;
+  transition: all 0.4s ease;
+}
+.bid-form button:hover {
+  background-color: transparent;
+  color: var(--main-dark-color);
+}
+.item-page {
+  width: 100%;
+}
+.selected {
+  border-color: red;
 }

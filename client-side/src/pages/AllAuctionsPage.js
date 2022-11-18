@@ -1,20 +1,25 @@
 import React, { useContext } from 'react';
 import MainContext from '../context/MainContext';
 import AuctionCardSmall from '../components/AuctionCardSmall';
+import { useNavigate } from 'react-router-dom';
 
 export default function AllAuctionsPage() {
+  const nav = useNavigate();
+
   const { auctionStates } = useContext(MainContext);
   const { allAuctions } = auctionStates;
-
+  console.log('allAuctions ===', allAuctions);
   return (
-    <div>
+    <div className='auctions-page'>
       <div className='top'>
-        <h1>All Auctions</h1>
-        <button>Upload New</button>
+        <h2>All Auctions</h2>
+        <button onClick={() => nav('/add-auction')}>Upload New</button>
       </div>
       <div className='auctions'>
-        {allAuctions ? (
-          auctionStates.allAuctions.map((auction, index) => <AuctionCardSmall auction={auction} key={index} />)
+        {allAuctions.length > 0 ? (
+          auctionStates.allAuctions.map((auction, index) => (
+            <AuctionCardSmall auction={auction} key={index} idx={index} />
+          ))
         ) : (
           <h2>No Auctions Found</h2>
         )}
