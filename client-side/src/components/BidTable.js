@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import BidForm from './forms/BidForm';
-export default function BidTable() {
-  const [bids, setBids] = useState([{ username: 'admin', value: 101 }]);
-  console.log('setBids ===', setBids);
+export default function BidTable({ bids }) {
   return (
     <div className='bids-table'>
       <h2>All Bids</h2>
       <div className='all-bids'>
-        {bids.length > 0 ? (
+        {bids && bids.length > 0 ? (
           bids.map((bid, i) => (
             <div className='single-bid' key={i}>
               <h3>{bid.username}</h3>

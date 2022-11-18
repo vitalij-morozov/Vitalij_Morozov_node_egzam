@@ -1,10 +1,13 @@
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
+import MainContext from '../../context/MainContext';
 
 export default function CreateAuctionForm() {
   const imageRef = useRef();
   const titleRef = useRef();
   const timeRef = useRef();
   const priceRef = useRef();
+
+  const { socket, auctionStates } = useContext(MainContext);
 
   return (
     <form className='auction-form'>
@@ -33,6 +36,17 @@ export default function CreateAuctionForm() {
       <button
         onClick={(e) => {
           e.preventDefault();
+          const newItem = {
+            index: +auctionStates.allAuctions.length + 1,
+            image: imageRef.current.value,
+            title: titleRef.current.value,
+            price: +priceRef.current.value,
+            finished: false,
+            bids: [],
+            timeLeft: +timeRef.current.value,
+            user: 'admin',
+          };
+          socket.emit('addNew', newItem);
         }}
       >
         Place An Auction

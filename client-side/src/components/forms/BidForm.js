@@ -1,7 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
+import MainContext from '../../context/MainContext';
 
 export default function BidForm() {
   const bidRef = useRef();
+  const { socket } = useContext(MainContext);
 
   return (
     <form className='bid-form'>
@@ -11,6 +13,7 @@ export default function BidForm() {
       <button
         onClick={(e) => {
           e.preventDefault();
+          socket.emit('updateItem', { price: 21000 });
         }}
       >
         Place A Bid

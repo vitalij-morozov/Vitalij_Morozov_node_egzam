@@ -1,9 +1,15 @@
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
+import MainContext from '../../context/MainContext';
+import ErrorComponent from '../ErrorComponent';
+import http from '../../plugins/http';
 
 export default function RegisterForm({ setShowLogin }) {
   const usernameRef = useRef();
   const passOneRef = useRef();
   const passTwoRef = useRef();
+
+  const { baseUrl, errorStates } = useContext(MainContext);
+  const { err, setErr } = errorStates;
 
   return (
     <form className='auth-form register'>
@@ -19,20 +25,40 @@ export default function RegisterForm({ setShowLogin }) {
         <label htmlFor='passtwo'>Repeat Password: </label>
         <input ref={passTwoRef} type='text' name='passtwo' placeholder='Repeat Password' />
       </div>
-      <a
+      <p
         onClick={() => {
           setShowLogin(true);
         }}
       >
         Go Back To Log In
-      </a>
+      </p>
       <button
         onClick={(e) => {
           e.preventDefault();
+          const regData = {
+            username: usernameRef.current.value,
+            passOne: passOneRef.current.value,
+            passTwo: passTwoRef.current.value,
+          };
+
+          http.post(`${baseUrl}/register`, regData).then((data) => {
+            console.log('register http data', data.details);
+            if (data.error) {
+              setErr(true);
+              errorStates.setErrorMessage(data.message);
+            } else if (data.message === 'ok') {
+              setErr(false);
+              setShowLogin(true);
+            }
+          });
+          usernameRef.current.value = '';
+          passOneRef.current.value = '';
+          passTwoRef.current.value = '';
         }}
       >
         Register
       </button>
+      {err ? <ErrorComponent /> : ''}
     </form>
   );
 }

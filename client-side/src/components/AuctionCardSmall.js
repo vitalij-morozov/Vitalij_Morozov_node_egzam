@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import MainContext from '../context/MainContext';
 
 export default function AuctionCardSmall({ auction, idx }) {
-  const { image, title, timeLeft, price, bids } = auction;
+  const { index, image, title, timeLeft, price, bids } = auction;
   const { styleStates } = useContext(MainContext);
   const { selected, setSelected } = styleStates;
 
@@ -27,7 +27,7 @@ export default function AuctionCardSmall({ auction, idx }) {
       </div>
       <button
         onClick={() => {
-          nav(`/auctions/${idx}`);
+          nav(`/auctions/${index}`);
         }}
       >
         Go To Bid On This Item

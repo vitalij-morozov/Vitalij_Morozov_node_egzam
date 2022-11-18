@@ -1,9 +1,9 @@
 import './style/reset.css';
 import './style/App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MainContext from './context/MainContext';
-// import io from 'socket.io-client';
+import io from 'socket.io-client';
 
 import StartPage from './pages/StartPage';
 import AllAuctionsPage from './pages/AllAuctionsPage';
@@ -11,8 +11,9 @@ import UploadNewAuctionPage from './pages/UploadNewAuctionPage';
 import SingleAuctionPage from './pages/SingleAuctionPage';
 import Header from './components/Header';
 
-// const socket = io.connect('http://localhost:4001');
-const socket = '';
+const baseUrl = 'http://localhost:4001';
+
+const socket = io.connect(baseUrl + '/');
 function App() {
   const [selected, setSelected] = useState(null);
 
@@ -76,13 +77,32 @@ function App() {
     setLoggedIn,
   };
 
+  const [errorMessage, setErrorMessage] = useState('');
+  const [err, setErr] = useState(false);
+  const errorStates = {
+    errorMessage,
+    setErrorMessage,
+    err,
+    setErr,
+  };
+
   const states = {
+    baseUrl,
     socket,
     styleStates,
     auctionStates,
     loginStates,
+    errorStates,
   };
 
+  useEffect(() => {
+    socket.emit('auctions');
+    socket.on('getAllItems', (data) => {
+      console.log('data ===', data);
+      setAllAuctions(data);
+    });
+  }, []);
+  console.log('allAuctions ===', allAuctions);
   return (
     <div className='App'>
       <MainContext.Provider value={states}>
