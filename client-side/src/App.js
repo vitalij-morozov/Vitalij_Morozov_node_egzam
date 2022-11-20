@@ -15,55 +15,22 @@ const baseUrl = 'http://localhost:4001';
 
 const socket = io.connect(baseUrl + '/');
 function App() {
-  const [selected, setSelected] = useState(null);
+  const [currentUser, setCurrentUser] = useState('');
 
-  const styleStates = {
-    selected,
-    setSelected,
+  console.log('currentUser ===', currentUser);
+  const userStates = {
+    currentUser,
+    setCurrentUser,
   };
 
-  const [allAuctions, setAllAuctions] = useState([
-    {
-      image:
-        'https://images.unsplash.com/photo-1556596187-c3d988ea368c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1073&q=80',
-      title: 'A Duck',
-      price: 100,
-      timeLeft: '30s',
-      bids: [],
-    },
-    {
-      image:
-        'https://images.unsplash.com/photo-1556596187-c3d988ea368c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1073&q=80',
-      title: 'A Duck',
-      price: 100,
-      timeLeft: '30s',
-      bids: [],
-    },
-    {
-      image:
-        'https://images.unsplash.com/photo-1556596187-c3d988ea368c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1073&q=80',
-      title: 'A Duck',
-      price: 100,
-      timeLeft: '30s',
-      bids: [],
-    },
-    {
-      image:
-        'https://images.unsplash.com/photo-1556596187-c3d988ea368c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1073&q=80',
-      title: 'A Duck',
-      price: 100,
-      timeLeft: '30s',
-      bids: [],
-    },
-    {
-      image:
-        'https://images.unsplash.com/photo-1556596187-c3d988ea368c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1073&q=80',
-      title: 'A Duck',
-      price: 100,
-      timeLeft: '30s',
-      bids: [],
-    },
-  ]);
+  const [times, setTimes] = useState([]);
+
+  const timer = {
+    times,
+    setTimes,
+  };
+
+  const [allAuctions, setAllAuctions] = useState([]);
 
   const auctionStates = {
     allAuctions,
@@ -89,20 +56,38 @@ function App() {
   const states = {
     baseUrl,
     socket,
-    styleStates,
+    userStates,
     auctionStates,
     loginStates,
     errorStates,
+    timer,
   };
 
   useEffect(() => {
     socket.emit('auctions');
     socket.on('getAllItems', (data) => {
-      console.log('data ===', data);
       setAllAuctions(data);
     });
   }, []);
-  console.log('allAuctions ===', allAuctions);
+
+  useEffect(() => {
+    if (localStorage.getItem('user')) {
+      setCurrentUser(localStorage.getItem('user'));
+    } else {
+      setCurrentUser('');
+    }
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      socket.emit('timeUpdate');
+      socket.on('updatedTime', (data) => {
+        setTimes(data);
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+  // console.log('allAuctions ===', allAuctions);
   return (
     <div className='App'>
       <MainContext.Provider value={states}>

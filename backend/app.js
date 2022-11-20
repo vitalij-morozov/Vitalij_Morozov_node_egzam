@@ -12,7 +12,14 @@ const router = require('./routers/MainRouter');
 
 const http = require('http').createServer(app);
 
-mongoose.connect(process.env.MONGO_KEY);
+mongoose
+  .connect(process.env.MONGO_KEY)
+  .then(() => {
+    console.log('mongoose connection is established');
+  })
+  .catch((error) => {
+    console.warn(error);
+  });
 
 app.use(cors());
 app.use(morgan('dev'));

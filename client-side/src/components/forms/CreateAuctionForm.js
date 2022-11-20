@@ -1,4 +1,5 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import MainContext from '../../context/MainContext';
 
 export default function CreateAuctionForm() {
@@ -7,7 +8,42 @@ export default function CreateAuctionForm() {
   const timeRef = useRef();
   const priceRef = useRef();
 
-  const { socket, auctionStates } = useContext(MainContext);
+  const nav = useNavigate();
+
+  const { socket, auctionStates, userStates } = useContext(MainContext);
+
+  const { allAuctions, setAllAuctions } = auctionStates;
+
+  useEffect(() => {
+    socket.on('newLot', (data) => {
+      setAllAuctions([data, ...allAuctions]);
+    });
+  }, [socket, allAuctions, setAllAuctions]);
+
+  const newAuctionHandler = (e) => {
+    e.preventDefault();
+    if (!userStates.currentUser) {
+      alert('You must log in to post');
+      return;
+    }
+    const newItem = {
+      index: +auctionStates.allAuctions.length + 1,
+      image: imageRef.current.value.trim(),
+      title: titleRef.current.value.trim(),
+      price: +priceRef.current.value.trim(),
+      finished: false,
+      bids: [],
+      timeLeft: +timeRef.current.value.trim() * 60,
+      user: userStates.currentUser,
+    };
+    socket.emit('addNew', newItem);
+    socket.on('addError', (data) => {
+      if (data.error) {
+        return alert(data.message);
+      }
+    });
+    nav('/auctions');
+  };
 
   return (
     <form className='auction-form'>
@@ -33,24 +69,7 @@ export default function CreateAuctionForm() {
         <label htmlFor='image-url'>Item Price: </label>
         <input ref={priceRef} type='number' step={0.1} name='image-url' placeholder='Enter item price' />
       </div>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          const newItem = {
-            index: +auctionStates.allAuctions.length + 1,
-            image: imageRef.current.value,
-            title: titleRef.current.value,
-            price: +priceRef.current.value,
-            finished: false,
-            bids: [],
-            timeLeft: +timeRef.current.value,
-            user: 'admin',
-          };
-          socket.emit('addNew', newItem);
-        }}
-      >
-        Place An Auction
-      </button>
+      <button onClick={newAuctionHandler}>Place An Auction</button>
     </form>
   );
 }

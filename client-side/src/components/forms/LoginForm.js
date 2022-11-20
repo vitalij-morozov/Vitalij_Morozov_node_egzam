@@ -10,8 +10,28 @@ export default function LoginForm({ setShowLogin }) {
   const usernameRef = useRef();
   const passwordRef = useRef();
 
-  const { baseUrl, errorStates } = useContext(MainContext);
-  const { err, setErr } = errorStates;
+  const { baseUrl, errorStates, userStates } = useContext(MainContext);
+  const { err, setErr, setErrorMessage } = errorStates;
+
+  const loginHandler = (e) => {
+    e.preventDefault();
+    const loginData = { username: usernameRef.current.value.trim(), password: passwordRef.current.value.trim() };
+    setErr(true);
+    setErrorMessage('Ok, wait to get redirected');
+
+    http.post(`${baseUrl}/login`, loginData).then((data) => {
+      console.log('login http data', data);
+      if (data.error) {
+        setErr(true);
+        setErrorMessage(data.message);
+      } else if (data.message === 'login ok') {
+        setErr(false);
+        localStorage.setItem('user', data.data.username);
+        userStates.setCurrentUser(localStorage.getItem('user'));
+        nav('/auctions');
+      }
+    });
+  };
 
   return (
     <form className='auth-form login'>
@@ -30,27 +50,7 @@ export default function LoginForm({ setShowLogin }) {
       >
         Or Go To Register!
       </p>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          const loginData = { username: usernameRef.current.value, password: passwordRef.current.value };
-          http.post(`${baseUrl}/login`, loginData).then((data) => {
-            console.log('login http data', data);
-            if (data.error) {
-              setErr(true);
-              errorStates.setErrorMessage(data.message);
-            } else if (data.message === 'ok') {
-              setErr(false);
-              localStorage.setItem('userToken', data.data.secret);
-              nav('/auctions');
-            }
-          });
-          usernameRef.current.value = '';
-          passwordRef.current.value = '';
-        }}
-      >
-        Log In
-      </button>
+      <button onClick={loginHandler}>Log In</button>
       {err ? <ErrorComponent /> : ''}
     </form>
   );

@@ -6,9 +6,12 @@ import BidTable from '../components/BidTable';
 export default function SingleAuctionPage() {
   const nav = useNavigate();
 
-  const { socket } = useContext(MainContext);
+  const { socket, timer } = useContext(MainContext);
 
   const [singleItem, setSingleItem] = useState({});
+
+  const [isOver, setIsOver] = useState(false);
+  const [bids, setBids] = useState([]);
 
   const { itemId } = useParams();
 
@@ -16,11 +19,16 @@ export default function SingleAuctionPage() {
     socket.emit('itemById', itemId);
     socket.on('getItem', (data) => {
       setSingleItem(data);
+      setBids(data.bids);
     });
-  }, [singleItem]);
+  }, [itemId, socket]);
+
+  useEffect(() => {
+    setIsOver(timer.times[singleItem.index - 1] === 0 ? true : false);
+  }, [timer.times, singleItem]);
 
   console.log('singleItem ===', singleItem);
-  console.log('itemId ===', itemId);
+
   return (
     <div className='item-page'>
       <div className='top'>
@@ -31,7 +39,7 @@ export default function SingleAuctionPage() {
       </div>
       <div className='single-auction'>
         <AuctionCardBig item={singleItem} />
-        <BidTable bids={singleItem.bids} />
+        <BidTable bids={bids} setBids={setBids} item={singleItem} isOver={isOver} />
       </div>
     </div>
   );

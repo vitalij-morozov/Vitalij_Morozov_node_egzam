@@ -8,7 +8,6 @@ export default function AllAuctionsPage() {
 
   const { auctionStates } = useContext(MainContext);
   const { allAuctions } = auctionStates;
-  console.log('allAuctions ===', allAuctions);
   return (
     <div className='auctions-page'>
       <div className='top'>

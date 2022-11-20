@@ -3,26 +3,29 @@ import { useNavigate } from 'react-router-dom';
 import MainContext from '../context/MainContext';
 
 export default function AuctionCardSmall({ auction, idx }) {
-  const { index, image, title, timeLeft, price, bids } = auction;
-  const { styleStates } = useContext(MainContext);
-  const { selected, setSelected } = styleStates;
+  const { index, image, title, price, bids, user } = auction;
+
+  const { timer } = useContext(MainContext);
 
   const nav = useNavigate();
 
-  console.log('idx  ===', idx);
   return (
-    <div className={`auction-card small ${selected === idx ? 'selected' : ''}`} onClick={() => setSelected(idx)}>
+    <div className={'auction-card small'}>
       <img src={image} alt={`${title} auction`} />
       <div className='text'>
         <h3 className='title'>Item: "{title}"</h3>
         <span className='time'>
-          Time Until End: <span className='value'>{timeLeft}</span>
+          Time Until End: <span className='value'>{timer.times[index - 1]} sec</span>
         </span>
         <span>
           Current Price: <span className='value'>${price}</span>
         </span>
         <span className='bids'>
           Bids Amount: <span className='value'>{bids.length}</span>
+        </span>
+        <span>
+          Lot Owner:
+          <span className='user'>{user}</span>
         </span>
       </div>
       <button

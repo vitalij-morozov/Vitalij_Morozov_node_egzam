@@ -1,15 +1,4 @@
 const http = {
-  get: async (url) => {
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-      console.log('get data ===', data);
-      return data;
-    } catch (error) {
-      console.log(error.message);
-    }
-  },
-
   post: async (url, data) => {
     try {
       const options = {

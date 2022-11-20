@@ -8,28 +8,23 @@ const registerUser = async (req, res) => {
   const secret = uid(20);
   const user = new userSchema({ username, password: hash, secret });
   await user.save();
-  res.json({ error: false, message: 'ok', data: user });
+  return res.status(201).json({ error: false, message: 'ok', data: user });
 };
 
 const loginUser = async (req, res) => {
-  const { username, password } = req.body;
+  const { username } = req.body;
 
   const user = await userSchema.findOne({ username });
+  const successMsg = {
+    error: false,
+    message: 'login ok',
+    data: {
+      sec: user.secret,
+      username: user.username,
+    },
+  };
 
-  if (!user) {
-    return res.json({ error: true, message: 'user not found' });
-  }
-  if (await bcrypt.compare(password, user.password)) {
-    return res.json({
-      error: false,
-      message: 'ok',
-      data: {
-        secret: user.secret,
-        ...user,
-      },
-    });
-  }
-  res.json({ error: true, message: 'bad credentials' });
+  return res.json(successMsg);
 };
 
 module.exports = {

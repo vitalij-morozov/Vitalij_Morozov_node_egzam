@@ -9,7 +9,7 @@ export default function RegisterForm({ setShowLogin }) {
   const passTwoRef = useRef();
 
   const { baseUrl, errorStates } = useContext(MainContext);
-  const { err, setErr } = errorStates;
+  const { err, setErr, setErrorMessage } = errorStates;
 
   return (
     <form className='auth-form register'>
@@ -36,16 +36,17 @@ export default function RegisterForm({ setShowLogin }) {
         onClick={(e) => {
           e.preventDefault();
           const regData = {
-            username: usernameRef.current.value,
-            passOne: passOneRef.current.value,
-            passTwo: passTwoRef.current.value,
+            username: usernameRef.current.value.trim(),
+            passOne: passOneRef.current.value.trim(),
+            passTwo: passTwoRef.current.value.trim(),
           };
-
+          setErr(true);
+          setErrorMessage('Wait to get refirected to login');
           http.post(`${baseUrl}/register`, regData).then((data) => {
             console.log('register http data', data.details);
             if (data.error) {
               setErr(true);
-              errorStates.setErrorMessage(data.message);
+              setErrorMessage(data.message);
             } else if (data.message === 'ok') {
               setErr(false);
               setShowLogin(true);
