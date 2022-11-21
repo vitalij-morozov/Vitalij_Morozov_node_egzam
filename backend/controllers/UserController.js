@@ -4,7 +4,7 @@ const { uid } = require('uid');
 
 const registerUser = async (req, res) => {
   const { username, passOne: password } = req.body;
-  const hash = await bcrypt.hash(password, 20);
+  const hash = await bcrypt.hash(password, 10);
   const secret = uid(20);
   const user = new userSchema({ username, password: hash, secret });
   await user.save();

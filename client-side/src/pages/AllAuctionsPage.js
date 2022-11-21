@@ -12,13 +12,13 @@ export default function AllAuctionsPage() {
     <div className='auctions-page'>
       <div className='top'>
         <h2>All Auctions</h2>
-        <button onClick={() => nav('/add-auction')}>Upload New</button>
+        <button onClick={() => nav('/add-auction')} className='nav-btn'>
+          Upload New
+        </button>
       </div>
       <div className='auctions'>
         {allAuctions.length > 0 ? (
-          auctionStates.allAuctions.map((auction, index) => (
-            <AuctionCardSmall auction={auction} key={index} idx={index} />
-          ))
+          auctionStates.allAuctions.map((auction, index) => <AuctionCardSmall auction={auction} key={index} />)
         ) : (
           <h2>No Auctions Found</h2>
         )}

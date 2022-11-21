@@ -17,7 +17,6 @@ const socket = io.connect(baseUrl + '/');
 function App() {
   const [currentUser, setCurrentUser] = useState('');
 
-  console.log('currentUser ===', currentUser);
   const userStates = {
     currentUser,
     setCurrentUser,
@@ -87,7 +86,7 @@ function App() {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
-  // console.log('allAuctions ===', allAuctions);
+
   return (
     <div className='App'>
       <MainContext.Provider value={states}>

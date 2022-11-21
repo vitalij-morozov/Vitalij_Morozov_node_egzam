@@ -31,8 +31,6 @@ const loginValidation = async (req, res, next) => {
   const { username, password } = req.body;
 
   const user = await userSchema.findOne({ username });
-  console.log('user  ===', user);
-  if (!user) return res.status(400).json({ error: true, message: 'user not found', data: null });
 
   const joiSchema = Joi.object({
     username: Joi.string().required(),
@@ -41,9 +39,9 @@ const loginValidation = async (req, res, next) => {
 
   try {
     const valResult = await joiSchema.validateAsync(req.body, { abortEarly: false });
-    console.log('valResult ===', valResult);
-    if (!bcrypt.compareSync(password, user.password))
-      return res.status(400).json({ error: true, message: 'incorrect password or username' });
+    if (!user) return res.status(400).json({ error: true, message: 'user not found', data: null });
+    const isOk = await bcrypt.compareSync(password, user.password);
+    if (!isOk) return res.status(400).json({ error: true, message: 'incorrect password or username' });
     next();
   } catch (error) {
     console.log('error ===', error);

@@ -2,8 +2,6 @@ import React from 'react';
 import BidForm from './forms/BidForm';
 
 export default function BidTable({ bids, setBids, item, isOver }) {
-  console.log(' bids ===', bids);
-
   const noBids = () => {
     if (!isOver) {
       return (
@@ -30,7 +28,7 @@ export default function BidTable({ bids, setBids, item, isOver }) {
     <div className='bids-table'>
       <h2>All Bids</h2>
       <div className='all-bids'>
-        {bids && bids.length > 0
+        {bids && !isOver && bids.length > 0
           ? bids
               .sort((a, b) => b.bid - a.bid)
               .map((bid, i) => (

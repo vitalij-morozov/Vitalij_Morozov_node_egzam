@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import MainContext from '../context/MainContext';
 import AuctionCardBig from '../components/AuctionCardBig';
 import BidTable from '../components/BidTable';
+
 export default function SingleAuctionPage() {
   const nav = useNavigate();
 
@@ -26,8 +27,6 @@ export default function SingleAuctionPage() {
   useEffect(() => {
     setIsOver(timer.times[singleItem.index - 1] === 0 ? true : false);
   }, [timer.times, singleItem]);
-
-  console.log('singleItem ===', singleItem);
 
   return (
     <div className='item-page'>

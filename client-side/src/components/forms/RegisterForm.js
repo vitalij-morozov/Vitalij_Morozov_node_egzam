@@ -11,6 +11,28 @@ export default function RegisterForm({ setShowLogin }) {
   const { baseUrl, errorStates } = useContext(MainContext);
   const { err, setErr, setErrorMessage } = errorStates;
 
+  const regHandler = (e) => {
+    e.preventDefault();
+    const regData = {
+      username: usernameRef.current.value.trim(),
+      passOne: passOneRef.current.value.trim(),
+      passTwo: passTwoRef.current.value.trim(),
+    };
+    http.post(`${baseUrl}/register`, regData).then((data) => {
+      console.log('register http data', data.details);
+      if (data.error) {
+        setErr(true);
+        setErrorMessage(data.message);
+      } else if (data.message === 'ok') {
+        setErr(false);
+        setShowLogin(true);
+      }
+    });
+    usernameRef.current.value = '';
+    passOneRef.current.value = '';
+    passTwoRef.current.value = '';
+  };
+
   return (
     <form className='auth-form register'>
       <div className='input-container'>
@@ -28,37 +50,13 @@ export default function RegisterForm({ setShowLogin }) {
       <p
         onClick={() => {
           setShowLogin(true);
+          setErrorMessage('');
         }}
+        className='auth-link'
       >
         Go Back To Log In
       </p>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          const regData = {
-            username: usernameRef.current.value.trim(),
-            passOne: passOneRef.current.value.trim(),
-            passTwo: passTwoRef.current.value.trim(),
-          };
-          setErr(true);
-          setErrorMessage('Wait to get refirected to login');
-          http.post(`${baseUrl}/register`, regData).then((data) => {
-            console.log('register http data', data.details);
-            if (data.error) {
-              setErr(true);
-              setErrorMessage(data.message);
-            } else if (data.message === 'ok') {
-              setErr(false);
-              setShowLogin(true);
-            }
-          });
-          usernameRef.current.value = '';
-          passOneRef.current.value = '';
-          passTwoRef.current.value = '';
-        }}
-      >
-        Register
-      </button>
+      <button onClick={regHandler}>Register</button>
       {err ? <ErrorComponent /> : ''}
     </form>
   );

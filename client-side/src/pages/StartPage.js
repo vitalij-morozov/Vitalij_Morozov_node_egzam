@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import LoginForm from '../components/forms/LoginForm';
 import RegisterForm from '../components/forms/RegisterForm';
 import MainContext from '../context/MainContext';
+
 export default function StartPage() {
   const [showLogin, setShowLogin] = useState(true);
 

@@ -7,28 +7,27 @@ export default function BidForm({ item, bids, setBids }) {
 
   const bidFormHandler = (e) => {
     e.preventDefault();
-    if (bidRef.current.value <= item.price) {
-      return alert('bid is too low');
-    }
-    console.log('item ===', item);
-    if (bids.length > 0 && bidRef.current.value <= bids[0].bid) {
-      return alert('You must bid more than other bids');
-    }
     if (userStates.currentUser === item.user) {
       return alert('You cannot bid on your own lot');
     }
+    if (bidRef.current.value <= item.price) {
+      return alert('bid is too low');
+    }
+    if (bids.length > 0 && bidRef.current.value <= bids[0].bid) {
+      return alert('You must bid more than other bids');
+    }
+
     const newData = {
       id: item.index,
       newBid: {
-        bid: bidRef.current.value.trim(),
+        bid: +bidRef.current.value.trim(),
         user: userStates.currentUser,
       },
     };
-    console.log('newBid ===', newData);
+    console.log('newData ===', newData);
     socket.emit('updateBids', newData);
     socket.on('getBid', (data) => {
       setBids([...bids, data]);
-      console.log(data, bids);
     });
   };
 

@@ -16,8 +16,6 @@ export default function LoginForm({ setShowLogin }) {
   const loginHandler = (e) => {
     e.preventDefault();
     const loginData = { username: usernameRef.current.value.trim(), password: passwordRef.current.value.trim() };
-    setErr(true);
-    setErrorMessage('Ok, wait to get redirected');
 
     http.post(`${baseUrl}/login`, loginData).then((data) => {
       console.log('login http data', data);
@@ -26,6 +24,7 @@ export default function LoginForm({ setShowLogin }) {
         setErrorMessage(data.message);
       } else if (data.message === 'login ok') {
         setErr(false);
+        setErrorMessage('');
         localStorage.setItem('user', data.data.username);
         userStates.setCurrentUser(localStorage.getItem('user'));
         nav('/auctions');
@@ -46,7 +45,9 @@ export default function LoginForm({ setShowLogin }) {
       <p
         onClick={() => {
           setShowLogin(false);
+          setErrorMessage('');
         }}
+        className='auth-link'
       >
         Or Go To Register!
       </p>
